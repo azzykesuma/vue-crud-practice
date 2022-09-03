@@ -1,17 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>Todo list</h1>
+  <form>
+    <label>Add todo</label>
+    <input type="text" v-model= 'todo' />
+    <button @click.prevent="handleAddTodo">Add Todo</button>
+  </form>
+  <div v-for="todo in todoData" key="todo.id">
+    <TodoComponent :todo="todo" @delete="handleDelete"/>
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import { computed } from '@vue/reactivity';
+import { ref } from 'vue';
+import TodoComponent from './components/TodoComponent.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+const todoData = ref([])
+const todoObj = ref({})
+const todo = ref('')
+
+
+  const handleAddTodo = () => {
+   todoObj.value.id = todo.value
+   todoObj.value.title = todo.value
+
+   todoData.value = [...todoData.value, { 
+      id : todoObj.value.id, 
+      title : todoObj.value.title,
+      isDone : false
+    }]
   }
-}
+
+  const handleDelete = id => {
+    todoData.value = todoData.value.filter(todo => todo.id !== id)
+  }
+
+  console.log(handleDelete);
+
+
 </script>
 
 <style>
@@ -24,3 +50,4 @@ export default {
   margin-top: 60px;
 }
 </style>
+
